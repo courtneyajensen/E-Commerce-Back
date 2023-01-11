@@ -8,6 +8,7 @@
       "start": "node server.js",
       "watch": "nodemon server.js",
       "seed": "node seeds/index.js"
+      
     },
     "repository": {
       "type": "git",
@@ -26,4 +27,3 @@
       "sequelize": "^5.21.7"
     }
   }
-  
