@@ -3,26 +3,76 @@ const { Tag, Product, ProductTag } = require('../../models');
 
 // The `/api/tags` endpoint
 
-router.get('/', (req, res) => {
-  // find all tags
-  // be sure to include its associated Product data
+router.get('/', async (req, res) => {
+  try{
+    const allTags = await Tag.findAll({
+      include:[{model: Product}],
+    })
+    res.status(200).json(allTags)
+    console.log('Success!')
+  }catch(e){
+    res.json(e)
+  }
 });
 
-router.get('/:id', (req, res) => {
-  // find a single tag by its `id`
-  // be sure to include its associated Product data
+//Finds single tag by 'Id'
+router.get('/:id', async (req, res) => {
+  try{
+    const oneTag = await Tag.findByPk(req.params.id, {
+      include: [{model: Product}]
+    })
+    res.status(200).json(oneTag)
+    console.log('Success!')
+  }catch(e){
+    res.json(e)
+  }
 });
 
-router.post('/', (req, res) => {
-  // create a new tag
+//Creates new tag
+router.post('/', async (req, res) => {
+  try {
+    const newTag = await Tag.create(req.body)
+    res.status(200).json(newTag)
+
+    if (!newTag) {
+      res.status(404).json({ message: 'No Tag Found!' });
+      return;
+    }
+  }catch(e) {
+    res.json(e)
+  }
 });
 
-router.put('/:id', (req, res) => {
-  // update a tag's name by its `id` value
+//Updates a tag by its 'Id' value
+router.put('/:id', async (req, res) => {
+  Tag.update(
+    {
+      tag_name: req.body.tag_name
+    },
+    {
+      where: {
+        id: req.params.id
+      }
+    })
+    .then(tagData => {
+      if (!tagData) {
+        res.status(404).json({ message: 'Id not found!'});
+        return;
+      }
+      res.json(tagData);
+    });
 });
 
-router.delete('/:id', (req, res) => {
-  // delete on tag by its `id` value
+//Deletes a tag by its 'Id' valuse
+router.delete('/:id', asynce (req, res) => {
+  try{
+    const deleteTag = await Tag.destroy({
+      where: {id: req.params.id}
+    })
+    res.status(200).json(deleteTag)
+  }catch(e) {
+    res.status(500).json(err)
+  }
 });
 
 module.exports = router;
