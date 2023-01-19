@@ -1,10 +1,10 @@
 const { Model, DataTypes } = require('sequelize');
-const { truncate } = require('../config/connection');
-
 const sequelize = require('../config/connection');
 
-class ProductTag extends Model {}
+// Create ProductTag model
+class ProductTag extends Model { }
 
+// Create fields/rules for ProductTag model
 ProductTag.init(
   {
     id: {
@@ -26,7 +26,7 @@ ProductTag.init(
         model: 'tag',
         key: 'id'
       }
-    },
+    }
   },
   {
     sequelize,
